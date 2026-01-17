@@ -1,0 +1,21 @@
+{
+  "family": "rko-backend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/rko-backend:latest",
+      "portMappings": [{ "containerPort": 8000, "protocol": "tcp" }],
+      "essential": true,
+      "environment": [
+        { "name": "DATABASE_URL", "value": "postgresql+psycopg://..." },
+        { "name": "JWT_SECRET_KEY", "value": "<set-me>" },
+        { "name": "CORS_ORIGINS", "value": "https://rko.ai" },
+        { "name": "FRONTEND_URL", "value": "https://rko.ai" }
+      ]
+    }
+  ]
+}

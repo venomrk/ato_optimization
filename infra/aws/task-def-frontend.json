@@ -1,0 +1,15 @@
+{
+  "family": "rko-frontend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/rko-frontend:latest",
+      "portMappings": [{ "containerPort": 80, "protocol": "tcp" }],
+      "essential": true
+    }
+  ]
+}
