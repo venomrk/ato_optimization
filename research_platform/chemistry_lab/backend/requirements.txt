@@ -1,0 +1,29 @@
+# FastAPI and server
+fastapi==0.108.0
+uvicorn[standard]==0.25.0
+python-multipart==0.0.6
+
+# Data validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
+
+# HTTP client
+httpx==0.26.0
+
+# Scientific computing
+numpy==1.26.2
+
+# Logging
+loguru==0.7.2
+
+# Database (optional)
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# CORS
+python-dotenv==1.0.0

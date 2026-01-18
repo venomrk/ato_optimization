@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unified Research & Chemistry Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loader-container">
+            <div class="dna-loader"></div>
+            <h2>Initializing Advanced Research Platform...</h2>
+            <p>Loading AI models and chemistry engines</p>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app-container" style="display: none;">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo">
+                    <span class="logo-icon">🔬</span>
+                    <span class="logo-text">Research<span class="accent">+</span>Chem Platform</span>
+                </div>
+            </div>
+            
+            <div class="nav-center">
+                <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+                    📊 Dashboard
+                </button>
+                <button class="nav-tab" data-tab="research" onclick="switchTab('research')">
+                    🔍 Research
+                </button>
+                <button class="nav-tab" data-tab="chemistry" onclick="switchTab('chemistry')">
+                    ⚗️ Chemistry
+                </button>
+                <button class="nav-tab" data-tab="credits" onclick="switchTab('credits')">
+                    💎 Credits
+                </button>
+            </div>
+            
+            <div class="nav-right">
+                <div class="credit-display">
+                    <span class="credit-icon">💰</span>
+                    <span id="creditBalance">0</span> credits
+                </div>
+                <div class="user-menu">
+                    <span id="username">User</span>
+                    <span class="tier-badge" id="tierBadge">Free</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboardTab" class="tab-content active">
+            <div class="dashboard-grid">
+                <!-- Welcome Card -->
+                <div class="card welcome-card">
+                    <h2>Welcome, <span id="welcomeUser"></span>!</h2>
+                    <p class="field-of-study" id="fieldOfStudy"></p>
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <div class="stat-value" id="researchCount">0</div>
+                            <div class="stat-label">Research Queries</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="chemSimCount">0</div>
+                            <div class="stat-label">Chemistry Simulations</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="aiMsgCount">0</div>
+                            <div class="stat-label">AI Messages</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Credit Usage Card -->
+                <div class="card credit-card">
+                    <h3>Credit Usage</h3>
+                    <div class="credit-balance-large">
+                        <span class="balance-number" id="dashCredits">0</span>
+                        <span class="balance-label">Credits Remaining</span>
+                    </div>
+                    <div class="usage-chart" id="usageChart"></div>
+                    <button class="btn-primary" onclick="switchTab('credits')">
+                        Add More Credits
+                    </button>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card activity-card">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity" class="activity-list"></div>
+                </div>
+
+                <!-- OpenRouter Status -->
+                <div class="card openrouter-card">
+                    <h3>OpenRouter Integration</h3>
+                    <div id="openrouterStatus" class="openrouter-status">
+                        <div class="status-indicator">
+                            <span id="orStatusDot" class="status-dot"></span>
+                            <span id="orStatusText">Not Configured</span>
+                        </div>
+                        <div id="orBalance" class="or-balance"></div>
+                    </div>
+                    <button onclick="configureOpenRouter()" class="btn-secondary">
+                        Configure API Key
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Tab -->
+        <div id="researchTab" class="tab-content">
+            <div class="research-container">
+                <div class="research-controls">
+                    <h2>Multi-Agent Research Analysis</h2>
+                    <p class="description">Analyze academic papers using 10+ advanced AI reasoning models</p>
+                    
+                    <div class="form-group">
+                        <label>Research Topic</label>
+                        <input type="text" id="researchTopic" 
+                               placeholder="e.g., transparent conducting oxides, quantum computing, mRNA vaccines"
+                               class="input-field">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Research Question</label>
+                        <textarea id="researchQuestion" 
+                                  placeholder="What specific question do you want answered? (e.g., What are the optimal doping strategies?)"
+                                  class="textarea-field" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Max Papers</label>
+                            <input type="number" id="maxPapers" value="10" min="1" max="50" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Analysis Types</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" checked value="what"> WHAT</label>
+                                <label><input type="checkbox" checked value="how"> HOW</label>
+                                <label><input type="checkbox" checked value="why"> WHY</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cost-estimate">
+                        <span>Estimated Cost: </span>
+                        <span id="researchCost" class="cost-value">0 credits</span>
+                    </div>
+                    
+                    <button onclick="startResearchAnalysis()" class="btn-large btn-primary" id="researchBtn">
+                        🚀 Start Analysis
+                    </button>
+                </div>
+                
+                <div class="research-results" id="researchResults">
+                    <div class="no-results">
+                        <div class="empty-state-icon">🔍</div>
+                        <p>Results will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chemistry Tab -->
+        <div id="chemistryTab" class="tab-content">
+            <div class="chemistry-container">
+                <!-- 3D Visualization -->
+                <div class="chem-visualization">
+                    <canvas id="moleculeCanvas" class="molecule-canvas"></canvas>
+                    <div class="chem-controls">
+                        <h3>Molecular Simulation</h3>
+                        <div class="slider-group">
+                            <label>Temperature: <span id="tempDisplay">298.15</span> K</label>
+                            <input type="range" id="temperature" min="200" max="500" value="298.15" 
+                                   oninput="updateTemperature(this.value)" class="slider">
+                        </div>
+                        <div class="slider-group">
+                            <label>Pressure: <span id="pressDisplay">101325</span> Pa</label>
+                            <input type="range" id="pressure" min="50000" max="200000" value="101325" 
+                                   oninput="updatePressure(this.value)" class="slider">
+                        </div>
+                        <button onclick="runChemistrySimulation()" class="btn-primary">
+                            ⚡ Simulate Reaction
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Chemistry Chat -->
+                <div class="chem-chat">
+                    <h3>Chemistry AI Assistant</h3>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-message assistant">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                <p>Hello! I'm your chemistry AI assistant powered by OpenRouter.</p>
+                                <p>Ask me about chemical reactions, mechanisms, compounds, or simulations!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chemChatInput" 
+                               placeholder="Ask about chemistry (e.g., Why does water boil at 100°C?)"
+                               class="input-field"
+                               onkeypress="if(event.key === 'Enter') sendChemistryMessage()">
+                        <button onclick="sendChemistryMessage()" class="btn-primary">Send</button>
+                    </div>
+                    <div class="chat-options">
+                        <label>
+                            <input type="checkbox" id="useOpenRouter" checked>
+                            Use OpenRouter (Advanced AI)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credits Tab -->
+        <div id="creditsTab" class="tab-content">
+            <div class="credits-container">
+                <div class="subscription-section">
+                    <h2>Subscription Plans</h2>
+                    <div class="plans-grid">
+                        <div class="plan-card">
+                            <h3>Free</h3>
+                            <div class="plan-price">$0<span>/month</span></div>
+                            <ul class="plan-features">
+                                <li>✓ 100 starting credits</li>
+                                <li>✓ 2 AI agents</li>
+                                <li>✓ Basic models</li>
+                                <li>✓ 10 research queries/day</li>
+                                <li>✓ Chemistry simulations</li>
+                            </ul>
+                            <button class="btn-secondary" disabled>Current Plan</button>
+                        </div>
+                        
+                        <div class="plan-card featured">
+                            <div class="featured-badge">⭐ Most Popular</div>
+                            <h3>Basic</h3>
+                            <div class="plan-price">$9.99<span>/month</span></div>
+                            <ul class="plan-features">
+                                <li>✓ 1,000 credits/month</li>
+                                <li>✓ 5 AI agents</li>
+                                <li>✓ Claude 3 Haiku</li>
+                                <li>✓ Unlimited research</li>
+                                <li>✓ Advanced chemistry</li>
+                                <li>✓ Priority support</li>
+                            </ul>
+                            <button onclick="upgradePlan('basic')" class="btn-primary">Upgrade Now</button>
+                        </div>
+                        
+                        <div class="plan-card">
+                            <h3>Pro</h3>
+                            <div class="plan-price">$29.99<span>/month</span></div>
+                            <ul class="plan-features">
+                                <li>✓ 5,000 credits/month</li>
+                                <li>✓ 10 AI agents</li>
+                                <li>✓ Claude 3 Sonnet + GPT-4</li>
+                                <li>✓ Custom molecules</li>
+                                <li>✓ Export data</li>
+                                <li>✓ API access</li>
+                            </ul>
+                            <button onclick="upgradePlan('pro')" class="btn-primary">Upgrade Now</button>
+                        </div>
+                        
+                        <div class="plan-card">
+                            <h3>Enterprise</h3>
+                            <div class="plan-price">$99.99<span>/month</span></div>
+                            <ul class="plan-features">
+                                <li>✓ 50,000 credits/month</li>
+                                <li>✓ 15 AI agents</li>
+                                <li>✓ All models (Claude Opus)</li>
+                                <li>✓ White-label option</li>
+                                <li>✓ Dedicated support</li>
+                                <li>✓ Custom integrations</li>
+                            </ul>
+                            <button onclick="upgradePlan('enterprise')" class="btn-primary">Upgrade Now</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="purchase-credits-section">
+                    <h2>Purchase Additional Credits</h2>
+                    <p>$1 = 100 credits</p>
+                    <div class="credit-packages">
+                        <button onclick="purchaseCredits(10)" class="credit-package">
+                            <span class="package-amount">1,000 credits</span>
+                            <span class="package-price">$10</span>
+                        </button>
+                        <button onclick="purchaseCredits(25)" class="credit-package featured">
+                            <span class="popular-tag">Best Value</span>
+                            <span class="package-amount">2,500 credits</span>
+                            <span class="package-price">$25</span>
+                        </button>
+                        <button onclick="purchaseCredits(50)" class="credit-package">
+                            <span class="package-amount">5,000 credits</span>
+                            <span class="package-price">$50</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="usage-history-section">
+                    <h2>Credit Usage History</h2>
+                    <div id="usageHistory" class="usage-table"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>🔬 Unified Research & Chemistry Platform</h1>
+                <p>Advanced AI-powered research analysis and chemistry simulation</p>
+            </div>
+            
+            <div class="login-tabs">
+                <button class="login-tab active" onclick="showLoginTab('login')">Login</button>
+                <button class="login-tab" onclick="showLoginTab('register')">Register</button>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required class="input-field">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required class="input-field">
+                </div>
+                <button type="submit" class="btn-large btn-primary">Login</button>
+            </form>
+            
+            <form id="registerForm" class="login-form" style="display: none;">
+                <div class="form-group">
+                    <input type="text" id="registerUsername" placeholder="Username" required class="input-field">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required class="input-field">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="registerPassword" placeholder="Password" required class="input-field">
+                </div>
+                <div class="form-group">
+                    <select id="fieldOfStudy" class="input-field">
+                        <option>Chemistry</option>
+                        <option>Physics</option>
+                        <option>Biology</option>
+                        <option>Materials Science</option>
+                        <option>Medicine</option>
+                        <option>Computer Science</option>
+                        <option>General Science</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-large btn-primary">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+# FastAPI and server
+fastapi==0.108.0
+uvicorn[standard]==0.25.0
+python-multipart==0.0.6
+
+# WebSocket support
+websockets==12.0
+
+# Data validation
+pydantic==2.5.3
+pydantic-settings==2.1.0
+
+# Authentication
+python-jose[cryptography]==3.3.0
+PyJWT==2.8.0
+bcrypt==4.1.2
+passlib[bcrypt]==1.7.4
+
+# HTTP client
+httpx==0.26.0
+
+# Scientific computing
+numpy==1.26.2
+
+# Logging
+loguru==0.7.2
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# Paper extraction
+arxiv==2.1.0
+biopython==1.83
+scholarly==1.7.11
+
+# Google AI
+google-generativeai==0.3.2
+
+# Anthropic Claude
+anthropic==0.8.0
+
+# OpenAI
+openai==1.6.1
+
+# CORS
+python-dotenv==1.0.0
