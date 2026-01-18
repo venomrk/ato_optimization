@@ -1,0 +1,71 @@
+{
+  "name": "RKO Research Chemistry Platform",
+  "description": "Multi-Agent Research and Chemistry Platform with FastAPI backend and PostgreSQL",
+  "services": [
+    {
+      "name": "backend",
+      "source": {
+        "repo": "YOUR_GITHUB_USERNAME/multi-agent-research-advanced-materials",
+        "branch": "main"
+      },
+      "build": {
+        "builder": "DOCKERFILE",
+        "dockerfilePath": "backend/Dockerfile"
+      },
+      "deploy": {
+        "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT",
+        "healthcheckPath": "/health"
+      },
+      "env": {
+        "SECRET_KEY": {
+          "description": "Secret key for JWT tokens (min 32 characters)",
+          "generator": "secret"
+        },
+        "CORS_ORIGINS": {
+          "description": "Comma-separated list of allowed origins",
+          "value": "*"
+        },
+        "OPENROUTER_API_KEY": {
+          "description": "OpenRouter API key for AI chat (optional)",
+          "value": ""
+        },
+        "SERP_API_KEY": {
+          "description": "SerpAPI key for Google Scholar search (optional)",
+          "value": ""
+        },
+        "STRIPE_SECRET_KEY": {
+          "description": "Stripe secret key for payments (optional)",
+          "value": ""
+        },
+        "STRIPE_WEBHOOK_SECRET": {
+          "description": "Stripe webhook secret (optional)",
+          "value": ""
+        }
+      }
+    },
+    {
+      "name": "postgres",
+      "image": "postgres:15",
+      "env": {
+        "POSTGRES_DB": "rko_research",
+        "POSTGRES_USER": "rko_user",
+        "POSTGRES_PASSWORD": {
+          "generator": "secret"
+        }
+      },
+      "volumes": [
+        {
+          "mountPath": "/var/lib/postgresql/data",
+          "name": "postgres-data"
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": "backend",
+      "to": "postgres",
+      "envVar": "DATABASE_URL"
+    }
+  ]
+}
